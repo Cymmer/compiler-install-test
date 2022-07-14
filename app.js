@@ -4,15 +4,15 @@ const port = 3000;
 var exec = require('child_process').exec;
 
 app.get('/cAndCPP', (req, res) => {
-    let res = '';
+    let result = '';
     exec('pkg install clang -y', (error, stdout, stderr) => {
         if(!error) {
-            res = "STDOUT: " + stdout;
+            result = "STDOUT: " + stdout;
         } else {
-            res = "ERROR: " +  error + stderr;
+            result = "ERROR: " +  error + stderr;
         }
     })
-  res.send('Hello World! ' + stdout);
+  res.send('Hello World! ' + result);
 })
 
 app.listen(port, () => {
