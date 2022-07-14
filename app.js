@@ -3,20 +3,20 @@ const app = express();
 const port = 3000;
 var exec = require('child_process').exec;
 
-app.get('/cAndCPP', (req, res) => {
+app.get('/c-and-cpp', (req, res) => {
     let result = '';
-    exec('pkg install clang -y', (error, stdout, stderr) => {
-        if(!error) {
-            result = "STDOUT: " + stdout;
-            // console.log("RESULT: ", result);
-        } else {
-            result = "ERROR: " +  error + stderr;
-        }
-        console.log("RESULT: ", result);
-        res.send('Hello World! ' + result);
-    })
-  
+    let child = exec('pkg install clang -y', {maxBuffer: 10486750});
+
+    child.stdout.on('data', (data) => result += data);
+    // child.stdout.pipe(process.stdout);
+    child.on('exit', () => {
+        res.send("Finished: " + result);
+    });
 })
+
+// app.get('/check-c-and-cpp', (req, res) => {
+//     let child = exec('gcc ')
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
