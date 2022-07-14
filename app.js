@@ -8,11 +8,14 @@ app.get('/cAndCPP', (req, res) => {
     exec('pkg install clang -y', (error, stdout, stderr) => {
         if(!error) {
             result = "STDOUT: " + stdout;
+            // console.log("RESULT: ", result);
         } else {
             result = "ERROR: " +  error + stderr;
         }
+        console.log("RESULT: ", result);
+        res.send('Hello World! ' + result);
     })
-  res.send('Hello World! ' + result);
+  
 })
 
 app.listen(port, () => {
