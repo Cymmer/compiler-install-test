@@ -5,14 +5,20 @@ const port = 3000;
 var exec = require('child_process').exec;
 
 app.get('/c-and-cpp', (req, res) => {
-    let result = '';
-    let child = exec('pkg install clang -y', {maxBuffer: 10486750});
+    // We make sure to uninstall first if ever user has installed clang but with corrupted
+    try {
+        execSync('pkg uninstall clang -y');
+    } catch(e) {
+        return res.json({ success: false, message: 'Something went wrong in uninstalling clang' });
+    }
 
-    child.stdout.on('data', (data) => result += data);
-    // child.stdout.pipe(process.stdout);
-    child.on('exit', () => {
-        res.send("Finished: " + result);
-    });
+    try {
+        execSync('pkg install clang -y');
+    } catch(e) {
+        return res.json({ success: false, message: 'Something went wrong in installing clang' });
+    }
+
+    return res.json({ success: true });
 })
 
 app.get('/check-c-and-cpp', (req, res) => {
